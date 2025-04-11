@@ -60,7 +60,7 @@ Este proyecto implementa un sistema de monitoreo distribuido utilizando:
 3. Acceder a los siguientes servicios desde el navegador:
    - Panel de monitoreo: http://localhost/monitor
    - API de registro: http://localhost/registro
-   - Dashboard de Traefik: http://localhost/dashboard
+   - Dashboard de Traefik: http://localhost:8080
 
 ## Autenticación
 
