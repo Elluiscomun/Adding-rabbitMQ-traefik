@@ -1,3 +1,4 @@
+import json
 import pika
 import os
 import time
@@ -12,16 +13,30 @@ time.sleep(15)  # Esperar a que el servicio de registro esté disponible
 
 connection = pika.BlockingConnection(pika.ConnectionParameters('rabbitmq'))
 
+channel = connection.channel()
+
+#channel.exchange_declare(exchange='eventos_clientes', exchange_type='direct', durable=True)
+channel.queue_declare(queue=f'client_{SERVICE_ID}')
+   
+#channel.queue_bind(
+#    exchange='eventos_clientes',
+#    queue=f'client_{SERVICE_ID}',
+#    routing_key=f'client_{SERVICE_ID}'  # La misma routing_key usada al publicar
+#)
 
 def registrar_servicio():
-    channel = connection.channel()
-    channel.queue_declare(queue=f'client_{SERVICE_ID}')
+
+    
+    message = {
+        "service_id": SERVICE_ID,
+        "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
+    }
 
     try:
        channel.basic_publish(exchange='',
                              routing_key=f'client_{SERVICE_ID}',
-                             body='Soy cliente')
-       channel.close()
+                             body=json.dumps(message))
+       
     except Exception as e:
         print(f"[{SERVICE_ID}] Error: {e}")
         channel.close()

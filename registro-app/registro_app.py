@@ -11,6 +11,8 @@ time.sleep(15)  # Espera 5 segundos antes de continuar, probablemente para dar t
 connection = pika.BlockingConnection(pika.ConnectionParameters('rabbitmq'))
 channel = connection.channel()
 
+channel.exchange_declare(exchange='eventos_clientes', exchange_type='direct', durable=True)  
+
 channel.queue_declare(queue='client_app1')
 channel.queue_declare(queue='client_app2')
 channel.queue_declare(queue='client_app3')
